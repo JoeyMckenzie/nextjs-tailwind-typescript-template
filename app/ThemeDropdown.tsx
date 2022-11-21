@@ -1,6 +1,7 @@
+import { defaultHead } from 'next/head';
 import { FormEventHandler, useCallback, useEffect, useState } from 'react';
 
-export const daisyThemes = [
+const daisyThemes = [
   'light',
   'dark',
   'cupcake',
@@ -32,40 +33,60 @@ export const daisyThemes = [
   'winter',
 ];
 
+const THEME_KEY = 'chowTheme';
+
 export default function ThemeDropdown(): JSX.Element {
-  const [theme, setTheme] = useState(daisyThemes[0]);
+  const defaultTheme = daisyThemes[0];
+  const [theme, setTheme] = useState(defaultTheme);
 
-  useEffect(() => console.log(theme), [theme]);
-
-  const onChange = useCallback<FormEventHandler<HTMLSelectElement>>(
-    (e) => {
-      // @ts-ignore
-      const themeFromFormValue = e.target.value;
-      const htmlTag = document.getElementsByTagName('html');
-
-      if (htmlTag) {
-        const htmlElement = htmlTag[0];
-        htmlElement.setAttribute('data-theme', themeFromFormValue);
-      }
-
-      setTheme(themeFromFormValue);
+  const setStorageTheme = useCallback(
+    (selectedTheme: string) => {
+      localStorage.setItem(THEME_KEY, selectedTheme);
+      setTheme(selectedTheme);
     },
     [setTheme]
   );
 
+  const setGlobalTheme = useCallback(
+    (selectedTheme: string) => {
+      const htmlTag = document.getElementsByTagName('html');
+
+      if (htmlTag) {
+        const htmlElement = htmlTag[0];
+        htmlElement.setAttribute('data-theme', selectedTheme);
+      }
+
+      setStorageTheme(selectedTheme);
+    },
+    [setStorageTheme]
+  );
+
+  useEffect(() => {
+    const stashedTheme = localStorage.getItem(THEME_KEY);
+    const selectedTheme = !!stashedTheme ? stashedTheme : defaultTheme;
+    setGlobalTheme(selectedTheme);
+  }, [defaultTheme, setGlobalTheme]);
+
+  const onChange: FormEventHandler<HTMLSelectElement> = useCallback(
+    (e) => {
+      // @ts-ignore
+      setGlobalTheme(e.target.value);
+    },
+    [setGlobalTheme]
+  );
+
   return (
-    <select className="select select-ghost w-full max-w-xs" onChange={onChange}>
-      {daisyThemes.map((theme) => (
-        <option key={theme} value={theme}>
-          {theme}
+    <select
+      className="select-ghost select w-full max-w-xs"
+      onChange={onChange}
+      value={theme}
+      defaultValue={defaultTheme}
+    >
+      {daisyThemes.map((t) => (
+        <option key={t} value={t}>
+          {t}
         </option>
       ))}
-      <option disabled defaultValue="">
-        Pick the best JS framework
-      </option>
-      <option>Svelte</option>
-      <option>Vue</option>
-      <option>React</option>
     </select>
   );
 }

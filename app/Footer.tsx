@@ -2,12 +2,12 @@
 
 export default function Footer(): JSX.Element {
   return (
-    <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
+    <footer className="footer footer-center rounded bg-base-200 p-10 text-base-content">
       <div className="grid grid-flow-col gap-4">
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
+        <a className="link-hover link">About us</a>
+        <a className="link-hover link">Contact</a>
+        <a className="link-hover link">Jobs</a>
+        <a className="link-hover link">Press kit</a>
       </div>
       <div>
         <div className="grid grid-flow-col gap-4">
