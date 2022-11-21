@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "postinstall": "husky install",
-    "test": ""
+    "test": "playwright test"
   },
   "lint-staged": {
     "*.{json,js,ts,tsx}": "yarn format"
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
+    "@playwright/test": "^1.28.0",
     "autoprefixer": "^10.4.13",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.0",
